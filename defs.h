@@ -1,13 +1,16 @@
 #pragma once
 
-typedef unsigned long long U64;
+#include <stdint.h>
+
+typedef uint64_t U64;
 
 #define NAME "cheese 1.0"
 #define BOARD_SQ_NUM 120
 
 enum {FALSE, TRUE};
 
-enum {
+enum 
+{
     // Empty place on board 
     EMPTY,
     // White Pieces
@@ -23,7 +26,7 @@ enum { RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8, RANK_NONE
 // Represents colors
 enum { WHITE, BLACK, BOTH };
 
-// Board Representation
+// Board Representation Enum
 enum 
 {
     A1 = 21, B1, C1, D1, E1, F1, G1, H1,
@@ -38,3 +41,49 @@ enum
     //Invalid Square
     NO_SQ
 };
+
+
+// Structure for the full board
+typedef struct
+{
+    int pieces[BOARD_SQ_NUM];
+    
+    // bitboard for pawns
+    // 00000000
+    // 11111111 // for white 
+    // 00000000 
+    // 00000000 
+    // 00000000 
+    // 00000000 
+    // 11111111 // for black
+    // 00000000
+    U64 pawns[3];
+    
+    // Square with white and black king
+    int KingSq[2];
+
+    // current side to move
+    int side;
+
+    // enPassant if active or not
+    int enPas;
+
+    // fifty moves tie rule
+    int fiftyMove;
+
+    // half moves
+    int ply;
+    int hisPly;
+
+    // hashkey for our position
+    U64 posKey;
+
+    // number of pieces on board
+    int pceNum[13];
+
+    // non-pawn pieces (3 for white, black, both)
+    int bigPce[3];
+    int majPce[3];
+    int minPce[3];
+
+} S_BOARD;
