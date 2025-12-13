@@ -7,6 +7,8 @@ typedef uint64_t U64;
 #define NAME "cheese 1.0"
 #define BOARD_SQ_NUM 120
 
+#define MAXGAMEMOVES 2048
+
 enum {FALSE, TRUE};
 
 enum 
@@ -26,6 +28,9 @@ enum { RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8, RANK_NONE
 // Represents colors
 enum { WHITE, BLACK, BOTH };
 
+// Castling rules (using bits) 0 0 0 0
+enum { WCK = 1, WQC = 2, BKC = 4, BQC = 8};
+
 // Board Representation Enum
 enum 
 {
@@ -42,6 +47,15 @@ enum
     NO_SQ
 };
 
+typedef struct {
+    
+    int move;
+    int castlePerm;
+    int enPas;
+    int fiftyMove;
+    U64 posKey;
+
+} S_UNDO;
 
 // Structure for the full board
 typedef struct
@@ -75,6 +89,9 @@ typedef struct
     int ply;
     int hisPly;
 
+    // castling permission
+    int castlePerm;
+
     // hashkey for our position
     U64 posKey;
 
@@ -85,5 +102,8 @@ typedef struct
     int bigPce[3];
     int majPce[3];
     int minPce[3];
+
+    // allows undo: storing the history of the board
+    S_UNDO history[MAXGAMEMOVES];
 
 } S_BOARD;
